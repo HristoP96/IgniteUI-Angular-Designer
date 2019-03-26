@@ -1,0 +1,42 @@
+@import '~igniteui-angular/lib/core/styles/themes/utilities';
+@import '~igniteui-angular/lib/core/styles//components/button/button-component';
+@import '~igniteui-angular/lib/core/styles//components/button/button-theme';
+
+$background: #111;
+$text-color: text-contrast($background);
+
+$button-background: text-contrast($background);
+
+$hamburger-theme: igx-button-theme(
+    $icon-background: $button-background,
+    $icon-hover-background: $button-background,
+    $icon-focus-background: $button-background
+);
+
+:host ::ng-deep {
+     @include igx-button($hamburger-theme);
+
+    .hamburger {
+        margin-right: 32px;
+    }
+}
+
+.sample-header {
+    padding: 48px 24px;
+    background: $background;
+
+    .title {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        color: $text-color;
+        font-weight: 400;
+        margin: 0;
+    }
+
+    .description {
+        color: $text-color;
+        margin-top: 48px;
+        margin-bottom: 0;
+    }
+}
