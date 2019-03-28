@@ -1,1 +1,46 @@
+<div class="grid-card">
+  <igx-card>
+    <igx-card-header>
+      <h3 class="igx-card-header__title">IgxGrid Designer</h3>
+    </igx-card-header>
+    <igx-card-content>
+      <h4>IgxGrid Features</h4>
+      <br>
+      <igx-combo width="400px"></igx-combo>
+      <br>
+      <h4>Styling</h4>
+      <br>
+      <igx-radio labelPosition="after" [value]="0" style="color:#c6538c" [(ngModel)]="styleSyntax">
+        SASS
+      </igx-radio>
+      <br>
+      <igx-radio labelPosition="after" [value]="1" style="color:aqua" [(ngModel)]="styleSyntax">
+        CSS
+      </igx-radio>
+      <h4>Grid Dimensions</h4>
+      <igx-input-group style="width:400px">
+        <label igxLabel for="widthInput" [textContent]="'Width'"></label>
+        <input id="widthInput" igxInput type="text">
+      </igx-input-group>
+      <igx-input-group style="width:400px">
+        <label igxLabel for="heightInput" [textContent]="'Height'"></label>
+        <input id="heightInput" igxInput type="text">
+      </igx-input-group>
+      
+    </igx-card-content>
+  </igx-card>
+</div>
+<igx-grid #grid ></igx-grid>
 
+<form #mainForm action="https://stackblitz.com/run" method="post" target="_blank">
+<input type="hidden" name="project[files][src/index.html]" [value]="files  | async | filterPipe: 'src' : 'index.html'">
+<input type="hidden" name="project[files][src/main.ts]" [value]="files | async | filterPipe: 'src' : 'main.ts'">
+<input type="hidden" name="project[files][src/polyfills.ts]" [value]="files | async | filterPipe: 'src' : 'polyfills.ts'">
+<input type="hidden" name="project[files][src/styles.scss]" [value]="files | async | filterPipe: 'src' : 'styles.scss'">
+
+<input type="hidden" name="project[files][angular.json]" [value]="files | async | filterPipe: '' : 'angular.json'| json">
+<input type="hidden" name="project[dependencies]" [value]="files | async | filterPipe: '' : 'package.json': 'dependencies' | json">
+<input type="hidden" name="project[template]" value="angular-cli">
+<input type="hidden" name="project[settings]" value="{&quot;compile&quot;:{&quot;clearConsole&quot;:false}}">
+</form>
+<button (click) = "mainForm.submit()">Click</button>

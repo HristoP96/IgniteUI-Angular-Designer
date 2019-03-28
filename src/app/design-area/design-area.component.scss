@@ -1,0 +1,18 @@
+.grid-card{
+    width: 50%;
+    margin:auto
+}
+:host ::ng-deep{
+    .igx-radio{
+        &__label{
+            font-size:25px;
+        }
+    }
+}
+
+igx-radio + igx-radio {
+    margin-top: 30px;
+}
+igx-input-group + igx-input-group {
+    margin-top: 14px;
+} 
