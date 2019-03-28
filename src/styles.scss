@@ -1,5 +1,5 @@
 // CSS Reset, comment out if not required or using a different module
-@import '~minireset.css/minireset';
+// @import '~minireset.css/minireset';
 /* You can add global styles to this file, and also import other style files */
 
 @import "~igniteui-angular/lib/core/styles/themes/index";
@@ -10,24 +10,3 @@
 
 @include igx-core();
 @include igx-theme($default-palette);
-
-@include b(igniteui-logo) {
-    @include e(u) {
-        fill: #f60;
-    }
-
-    @include e(text) {
-        fill: #000;
-        transform: translate(190px, -6px);
-    }
-
-    @include e(flame) {
-        fill: white;
-        transform: translate(55px, 97px);
-    }
-
-    @include e(rocket) {
-        fill: #222;
-        transform: translate(55px);
-    }
-}
