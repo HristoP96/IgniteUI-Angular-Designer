@@ -6,41 +6,61 @@
     <igx-card-content>
       <h4>IgxGrid Features</h4>
       <br>
-      <igx-combo width="400px"></igx-combo>
+      <igx-combo #combo [data] = "features" width="400px" (onClosed)="check(combo)"></igx-combo>
       <br>
       <h4>Styling</h4>
       <br>
-      <igx-radio labelPosition="after" [value]="0" style="color:#c6538c" [(ngModel)]="styleSyntax">
+      <igx-radio class="styling" labelPosition="after" [value]='0' style="color:#c6538c" [(ngModel)]="styleSyntax">
         SASS
       </igx-radio>
       <br>
-      <igx-radio labelPosition="after" [value]="1" style="color:aqua" [(ngModel)]="styleSyntax">
+      <igx-radio  class="styling" labelPosition="after" [value]='1' style="color:aqua" [(ngModel)]="styleSyntax">
         CSS
       </igx-radio>
       <h4>Grid Dimensions</h4>
-      <igx-input-group style="width:400px">
+      <igx-input-group #igroup1 style="width:70px">
         <label igxLabel for="widthInput" [textContent]="'Width'"></label>
-        <input id="widthInput" igxInput type="text">
+        <input  #input igxInput id="widthInput" igxInput type="text" [(ngModel)]="width">
+        <igx-suffix style="font-size: 18px">
+          {{widthResponsive? '%' : 'px'}}
+        </igx-suffix>
       </igx-input-group>
-      <igx-input-group style="width:400px">
+      <igx-switch #widthSwitch [checked]="true" [(ngModel)]="widthResponsive">{{widthSwitch.checked? 'Responsive' : 'Static'}} Width ({{widthSwitch.checked? '%' : 'px'}})</igx-switch>
+      <igx-input-group #igroup style="width:70px">
         <label igxLabel for="heightInput" [textContent]="'Height'"></label>
-        <input id="heightInput" igxInput type="text">
+        <input id="heightInput" igxInput type="text"  [(ngModel)]="height" >
+        <igx-suffix style="font-size: 18px">
+            {{heightResponsive? '%' : 'px'}}
+      </igx-suffix>
       </igx-input-group>
-      
+      <igx-switch #heightSwitch [checked]="false" [(ngModel)]="heightResponsive">{{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
+      <br>
+      <igx-radio [checked]="true" labelPosition="after" [(ngModel)]="gridObject['inputs']['autoGenerate']">
+        Auto Generate Columns
+      </igx-radio>
     </igx-card-content>
+    <igx-card-actions>
+      <button igxButton="flat" igxRipple (click)="saveComponent(gridObject); combo.deselectAllItems();">
+        Save
+      </button>
+    </igx-card-actions>
   </igx-card>
 </div>
-<igx-grid #grid ></igx-grid>
+<!-- <igx-grid #grid data={{data}} height="500px"></igx-grid> -->
 
 <form #mainForm action="https://stackblitz.com/run" method="post" target="_blank">
-<input type="hidden" name="project[files][src/index.html]" [value]="files  | async | filterPipe: 'src' : 'index.html'">
-<input type="hidden" name="project[files][src/main.ts]" [value]="files | async | filterPipe: 'src' : 'main.ts'">
-<input type="hidden" name="project[files][src/polyfills.ts]" [value]="files | async | filterPipe: 'src' : 'polyfills.ts'">
-<input type="hidden" name="project[files][src/styles.scss]" [value]="files | async | filterPipe: 'src' : 'styles.scss'">
-
-<input type="hidden" name="project[files][angular.json]" [value]="files | async | filterPipe: '' : 'angular.json'| json">
-<input type="hidden" name="project[dependencies]" [value]="files | async | filterPipe: '' : 'package.json': 'dependencies' | json">
-<input type="hidden" name="project[template]" value="angular-cli">
-<input type="hidden" name="project[settings]" value="{&quot;compile&quot;:{&quot;clearConsole&quot;:false}}">
+  <input type="hidden" name="project[files][src/index.html]"
+    [value]="files  | async | filterPipe: ['src' ,'index.html']">
+  <input type="hidden" name="project[files][src/main.ts]" [value]="files | async | filterPipe: ['src', 'main.ts']">
+  <input type="hidden" name="project[files][src/polyfills.ts]"
+    [value]="files | async | filterPipe: ['src' , 'polyfills.ts']">
+  <input type="hidden" name="project[files][src/styles.scss]"
+    [value]="files | async | filterPipe: ['src' , 'styles.scss']">
+  <input type="hidden" name="project[files][angular.json]"
+    [value]="files | async | filterPipe: ['required' , 'angular.json']| json">
+  <input type="hidden" name="project[dependencies]"
+    [value]="files | async | filterPipe: ['required' , 'package.json', 'dependencies'] | json">
+  <input type="hidden" name="project[template]" value="angular-cli">
+  <input type="hidden" name="project[settings]" value="{&quot;compile&quot;:{&quot;clearConsole&quot;:false}}">
 </form>
-<button (click) = "mainForm.submit()">Click</button>
+<button (click)="mainForm.submit()">Click</button>
