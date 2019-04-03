@@ -4,7 +4,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppComponent } from "./app.component";
 import { {igComponentModule} } from "igniteui-angular";
-import { {igComponentName}Sample } from './{igComponentSelector}/{igComponentSelector}/{igComponentSelector}.component.ts'
+import { {igComponentName}Sample } from './{igComponentSelector}/{igComponentSelector}.component.ts'
 
 @NgModule({
   bootstrap: [AppComponent],
