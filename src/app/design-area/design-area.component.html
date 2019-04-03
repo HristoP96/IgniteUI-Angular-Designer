@@ -35,7 +35,7 @@
       </igx-input-group>
       <igx-switch #heightSwitch [checked]="false" [(ngModel)]="heightResponsive">{{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
       <br>
-      <igx-radio [checked]="true" labelPosition="after" [(ngModel)]="gridObject['inputs']['autoGenerate']">
+      <igx-radio [checked]="true" [value]="true" labelPosition="after" [(ngModel)]="gridObject['inputs']['autoGenerate']">
         Auto Generate Columns
       </igx-radio>
     </igx-card-content>
@@ -43,12 +43,15 @@
       <button igxButton="flat" igxRipple (click)="saveComponent(gridObject); combo.deselectAllItems();">
         Save
       </button>
+      <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz()">
+        Open
+      </button>
     </igx-card-actions>
   </igx-card>
 </div>
 <!-- <igx-grid #grid data={{data}} height="500px"></igx-grid> -->
 
-<form #mainForm action="https://stackblitz.com/run" method="post" target="_blank">
+<!-- <form #mainForm action="https://stackblitz.com/run" method="post" target="_blank">
   <input type="hidden" name="project[files][src/index.html]"
     [value]="files  | async | filterPipe: ['src' ,'index.html']">
   <input type="hidden" name="project[files][src/main.ts]" [value]="files | async | filterPipe: ['src', 'main.ts']">
@@ -63,4 +66,4 @@
   <input type="hidden" name="project[template]" value="angular-cli">
   <input type="hidden" name="project[settings]" value="{&quot;compile&quot;:{&quot;clearConsole&quot;:false}}">
 </form>
-<button (click)="mainForm.submit()">Click</button>
+<button (click)="mainForm.submit()">Click</button> -->

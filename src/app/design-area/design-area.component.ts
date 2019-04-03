@@ -6,7 +6,7 @@ import { DataService } from '../data.service';
 import { Observable } from 'rxjs';
 import {GridFeatures} from '../objects/features';
 import { GridObject, IGridObject } from '../objects/grid';
-
+import sdk from '@stackblitz/sdk';
 @Component({
   selector: 'app-design-area',
   templateUrl: './design-area.component.html',
@@ -24,7 +24,7 @@ export class DesignAreaComponent implements OnInit {
   public heightResponsive = false;
   public width = '';
   public height = '';
-
+  public project;
   constructor(private service: DataService, private renderer: Renderer2, private el: ElementRef,
     private factoryRes: ComponentFactoryResolver, private vcr: ViewContainerRef) {
       const factory = this.factoryRes.resolveComponentFactory(this.gridType.type);
@@ -34,6 +34,7 @@ export class DesignAreaComponent implements OnInit {
       this.gridObject['inputs']['data'] = 'data';
   }
   ngOnInit() {
+    this.service.project.subscribe(proj => this.project = proj);
     this.data = DATA;
     this.files  = this.service.getData();
   }
@@ -71,8 +72,18 @@ export class DesignAreaComponent implements OnInit {
     const result = {};
     this.width = '';
     this.height = '';
-    // Object.keys(this.gridObject['inputs']).forEach(key => this.gridObject['inputs'][key] = undefined );
     result['template'] = template.outerHTML.replace('data', '[data]');
+    keys.forEach(key => {
+      if (result['template'].includes(key.toLocaleLowerCase())) {
+        result['template'] =  result['template'].replace(key.toLocaleLowerCase(), key);
+      }
+    });
+    Object.keys(this.gridObject['inputs']).forEach(key => { if (key !== 'data') { this.gridObject['inputs'][key] = undefined; }} );
     this.service.postData(result);
+
+  }
+  public openStackBlitz() {
+    sdk.openProject(this.project);
+    this.project = undefined;
   }
 }

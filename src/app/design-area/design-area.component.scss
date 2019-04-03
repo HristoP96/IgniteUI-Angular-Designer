@@ -1,12 +1,14 @@
-.grid-card{
-    width: 50%;
-    margin:auto
-}
+
 :host ::ng-deep{
     .igx-radio{
         &__label{
             font-size:25px;
         }
+    }
+
+    .igx-card{
+        width: 22%;
+        margin:auto
     }
 }
 
