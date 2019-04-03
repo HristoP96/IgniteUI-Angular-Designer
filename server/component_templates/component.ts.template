@@ -1,0 +1,16 @@
+import { Component} from '@angular/core';
+import { {igComponentName} } from 'igniteui-angular';
+{igDataFile}
+
+@Component({
+  selector: 'app-{igComponentSelector}-sample',
+  templateUrl: './{igComponentSelector}.component.html',
+  styleUrls: ['./{igComponentSelector}.component.scss']
+})
+export class {igComponentName}Sample implements OnInit {
+
+    {properties}
+
+    constructor(){}
+    ngOnInit(){ {propertiesDefinition} }
+}
