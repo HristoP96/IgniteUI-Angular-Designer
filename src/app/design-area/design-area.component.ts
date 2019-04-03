@@ -29,11 +29,14 @@ export class DesignAreaComponent implements OnInit {
     private factoryRes: ComponentFactoryResolver, private vcr: ViewContainerRef) {
       const factory = this.factoryRes.resolveComponentFactory(this.gridType.type);
       this.gridObject['inputs'] = {};
+      this.gridObject['data'] = {};
       factory.inputs.forEach(input => this.gridObject['inputs'][input['templateName']] = undefined);
       this.gridObject['selector'] = factory.selector;
       this.gridObject['inputs']['data'] = 'data';
       this.gridObject['name'] = factory.componentType.name;
       this.gridObject['module'] = factory.componentType.name.replace('Component', 'Module');
+      this.gridObject['data']['value'] = DATA;
+      this.gridObject['data']['name'] = 'DATA';
   }
   ngOnInit() {
     this.service.project.subscribe(proj => this.project = proj);
@@ -84,6 +87,7 @@ export class DesignAreaComponent implements OnInit {
     result['selector'] = component['selector'];
     result['name'] = component['name'];
     result['module'] = component['module'];
+    result['data'] = component['data'];
     this.service.postData(result);
 
   }
