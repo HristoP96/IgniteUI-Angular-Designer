@@ -1,6 +1,4 @@
-import { Component, ViewChild, HostBinding } from '@angular/core';
-import { IgxNavigationDrawerComponent, IgxIconService, IgxFilterPipe } from 'igniteui-angular';
-import {FilterPipePipe} from './filter-pipe.pipe';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',

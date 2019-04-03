@@ -32,6 +32,8 @@ export class DesignAreaComponent implements OnInit {
       factory.inputs.forEach(input => this.gridObject['inputs'][input['templateName']] = undefined);
       this.gridObject['selector'] = factory.selector;
       this.gridObject['inputs']['data'] = 'data';
+      this.gridObject['name'] = factory.componentType.name;
+      this.gridObject['module'] = factory.componentType.name.replace('Component', 'Module');
   }
   ngOnInit() {
     this.service.project.subscribe(proj => this.project = proj);
@@ -79,6 +81,9 @@ export class DesignAreaComponent implements OnInit {
       }
     });
     Object.keys(this.gridObject['inputs']).forEach(key => { if (key !== 'data') { this.gridObject['inputs'][key] = undefined; }} );
+    result['selector'] = component['selector'];
+    result['name'] = component['name'];
+    result['module'] = component['module'];
     this.service.postData(result);
 
   }

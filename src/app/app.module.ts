@@ -6,7 +6,9 @@ import {IgxGridModule,
        IgxNavigationDrawerModule,
        IgxCardModule,
        IgxComboModule,
-       IgxRadioModule
+       IgxRadioModule,
+       IgxGridComponent,
+       IgxSwitchModule
       } from 'igniteui-angular';
 
 import { AppComponent } from './app.component';
@@ -17,6 +19,7 @@ import { FilterPipePipe } from './filter-pipe.pipe';
 import { DesignAreaComponent } from './design-area/design-area.component';
 import { StashComponent } from './future-work/stash/stash.component';
 import {HttpClientModule} from '@angular/common/http';
+import { DataService } from './data.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,10 +38,12 @@ import {HttpClientModule} from '@angular/common/http';
     IgxCardModule,
     IgxComboModule,
     IgxRadioModule,
-    HttpClientModule
+    HttpClientModule,
+    IgxSwitchModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [DataService],
+  bootstrap: [AppComponent],
+  entryComponents: [IgxGridComponent]
 })
 export class AppModule {
 

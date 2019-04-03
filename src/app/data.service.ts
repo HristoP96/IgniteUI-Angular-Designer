@@ -7,9 +7,9 @@ import { Observable, Subject } from 'rxjs';
 export class DataService {
 
   data: Observable<any>;
-  form: Subject<any>;
+  project: Subject<any>;
   constructor(private http: HttpClient) {
-    this.form = new Subject<{}>();
+    this.project = new Subject<{}>();
   }
 
   public getData () {
@@ -18,6 +18,10 @@ export class DataService {
 
   public postData(component) {
     this.http.post<string>('http://localhost:4205/api/form', component).
-    subscribe(answer => {if (answer) {console.log(answer); }});
+    subscribe(answer => {
+      if (answer) {
+        this.project.next(answer);
+      }
+    });
   }
 }
