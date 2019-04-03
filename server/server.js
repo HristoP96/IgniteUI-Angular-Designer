@@ -3,15 +3,26 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const fs = require('fs')
 const path = require('path');
-
 const srcFiles = {}
 const jsonFiles = {};
+var appFiles = {};
 const dependencies = require('./dependencies.js');
 
-const app = express()
+appFiles["app.component.html"] = fs.readFileSync(path.join(__dirname, "./templates/app.component.html.template"), 'utf8')
+appFiles["app.component.ts"] = fs.readFileSync(path.join(__dirname, "./templates/app.component.ts.template"), 'utf8')
+appFiles["app.component.scss"] = fs.readFileSync(path.join(__dirname, "./templates/app.component.scss.template"), 'utf8')
+appFiles["app.module.ts"] = fs.readFileSync(path.join(__dirname, "./templates/app.module.ts.template"), 'utf8')
 
+
+const app = express()
 const srcDir = '../src/';
 
+var project = {
+  files: {},
+  title: {},
+  template: {},
+  dependencies: {}
+}
 
 fs.readdir(srcDir, (err, files) => {
   files.forEach(file => {
@@ -29,7 +40,6 @@ fs.readdir('../', (err, files) => {
   })
 })
 
-
 var corsOptions = {
   origin: 'http://localhost:4200',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
@@ -45,31 +55,42 @@ app.listen(4205, () => {
 
 
 app.route('/api/file').get((req, res) => {
-  res.send(files);
+ // res.send(files);
 });
 
 app.route('/api/form').post((req, res) => {
-  var files = {}
-  var project = {
-    files: {},
-    title: {},
-    template: {},
-    dependencies: {}
-  }
-  files['src'] = srcFiles;
-  project['files']["angular.json"] = JSON.stringify(jsonFiles['angular.json'], null, 2)
-  var paths = Object.keys(files)
-  paths.forEach(path => {
-    var names = Object.keys(files[path]);
-    var values = Object.values(files[path]);
-    for (let index = 0; index < values.length; index++) {
-      project["files"][`${path}/${names[index]}`] = values[index];
-    }
-
-  });
-
+  const template = req.body;
+  console.log(template)
   project['template'] = 'angular-cli'
   project['title'] = 'test'
   project['dependencies'] = jsonFiles['package.json']['dependencies']
+  project['files']["angular.json"] = JSON.stringify(jsonFiles['angular.json'], null, 2)
+  var files = {}
+  files['src'] = srcFiles;
+  appFiles = replaceFlags(appFiles, req.body)
+  files['src']['app'] = appFiles;
+  getFilePath('src', files, 'src')
   res.send(project)
 })
+function getFilePath(startDir, fileTree, path){
+
+  if(typeof fileTree[startDir] !== 'object'){
+     path;
+     project['files'][path] = fileTree[startDir]
+    return
+  }  
+  var children = Object.keys(fileTree[startDir])
+  children.forEach(child =>  {
+     return getFilePath(child, fileTree[startDir], `${path}/` + child);
+  });
+}
+
+function replaceFlags(fileTree, body){
+  var keys = Object.keys(fileTree)
+  keys.forEach(key =>{
+    fileTree[key] = fileTree[key].replace(/{igComponentSelector}/g, body['selector'])
+    fileTree[key] = fileTree[key].replace(/{igComponentModule}/g, body['module'])
+    fileTree[key] = fileTree[key].replace(/{igComponentName}/g, body['name'])
+  })
+  return fileTree 
+}
