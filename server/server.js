@@ -8,13 +8,13 @@ const jsonFiles = {};
 const postcss = require('postcss')
 const autoprefixer = require('autoprefixer')
 const dependencies = require('./dependencies.js');
-var project = {
-  files: {},
-  title: {},
-  template: {},
-  dependencies: {}
-}
 
+var project = {
+  files:{},
+  dependencies:{},
+  template:{},
+  title: {}
+}
 var mainTs = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/main.ts.template"), 'utf8')
 var polyfills = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/polyfills.ts.template"), 'utf8')
 var packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, `../package.json`), 'utf8'))
@@ -51,11 +51,17 @@ app.use(bodyParser.json())
 
 
 app.route('/api/form').post((req, res) => {
+  
+  var projectFiles = {};
+  var projectTitle;
+  var projectTemplate;
+  var projectDependencies = {};
+
   var srcFiles = {}
   var appFiles = {};
   var componentFiles = {};
   var allFilesTree = {}
-  var angularJson ={}
+  var angularJson = {}
   //Generate source files
   srcFiles["index.html"] = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/index.html.template"), 'utf8')
   srcFiles["main.ts"] = mainTs
@@ -68,20 +74,19 @@ app.route('/api/form').post((req, res) => {
   appFiles["app.module.ts"] = fs.readFileSync(path.join(__dirname, "./app_templates/app.module.ts.template"), 'utf8')
 
   //Initialize stackBlitz project core files
-  project['template'] = 'angular-cli'
-  project['title'] = 'Ignite UI for Angular'
-  project['dependencies'] = packageJson['dependencies']
+  projectTemplate = 'angular-cli'
+  projectTitle = 'Ignite UI for Angular'
+  projectDependencies = packageJson['dependencies']
 
-  if(req.body['style'] === 0){
-    srcFiles["styles.scss"] = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/styles.scss.template"), 'utf8')
-      angularJson = JSON.parse(fs.readFileSync(path.join(__dirname, "./srcFiles_templates/angular.json.template"), 'utf8')) 
-    project['files']["angular.json"] = JSON.stringify(angularJson, null, 2)
-  }else{
-    // srcFiles["styles.css"] = postcss([autoprefixer({browsers: ["last 5 versions", "> 3%"], grid: true})])
-    //                         .process(fs.readFileSync(path.join(__dirname, "../srcFiles_templates/styles.scss.template"), 'utf8')).css.toString()
-    // project['files']["angular.json"] = JSON.stringify(fs.readFileSync(path.join(__dirname, "./css_support_templates/angular-css-support.json.template")), null, 2)
-  }
-  
+  srcFiles["styles.scss"] = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/styles.scss.template"), 'utf8')
+  angularJson = JSON.parse(fs.readFileSync(path.join(__dirname, "./srcFiles_templates/angular.json.template"), 'utf8'))
+  projectFiles["angular.json"] = JSON.stringify(angularJson, null, 2)
+
+  // srcFiles["styles.css"] = postcss([autoprefixer({browsers: ["last 5 versions", "> 3%"], grid: true})])
+  //                         .process(fs.readFileSync(path.join(__dirname, "../srcFiles_templates/styles.scss.template"), 'utf8')).css.toString()
+  // project['files']["angular.json"] = JSON.stringify(fs.readFileSync(path.join(__dirname, "./css_support_templates/angular-css-support.json.template")), null, 2)
+
+
   // Add source files to the files tree
   allFilesTree['src'] = srcFiles;
 
@@ -93,7 +98,7 @@ app.route('/api/form').post((req, res) => {
   componentTsTemplate = fs.readFileSync(path.join(__dirname, "./component_templates/component.ts.template"), 'utf8')
 
   // Add the data in the date file 
-  if(req.body['data']){
+  if (req.body['data']) {
     componentFiles["data.ts"] = `export const ${req.body['data']['name']} = ${JSON.stringify(req.body['data']['value'], null, 2)}`
   }
 
@@ -105,46 +110,49 @@ app.route('/api/form').post((req, res) => {
   allFilesTree['src']['app'][`${req.body['selector']}`] = componentFiles
 
   //Apply the files tree in the Stackblitz project
-  getFilesPath('src', allFilesTree, 'src')
-
+  getFilesPath('src', allFilesTree, 'src', projectFiles)
+  project['files'] = projectFiles;
+  project['template'] = projectTemplate;
+  project['dependencies'] = projectDependencies
+  project['title'] - projectTitle
   res.send(project)
 })
 
-function getFilesPath(startDir, fileTree, path){
+function getFilesPath(startDir, fileTree, path, projectFiles) {
 
-  if(typeof fileTree[startDir] !== 'object'){
-     project['files'][path] = fileTree[startDir]
+  if (typeof fileTree[startDir] !== 'object') {
+    projectFiles[path] = fileTree[startDir]
     return
-  }  
+  }
   var children = Object.keys(fileTree[startDir])
-  children.forEach(child =>  {
-     return getFilesPath(child, fileTree[startDir], `${path}/` + child);
+  children.forEach(child => {
+    return getFilesPath(child, fileTree[startDir], `${path}/` + child, projectFiles);
   });
 }
 
-function replaceFlags(fileTree, body){
+function replaceFlags(fileTree, body) {
   var keys = Object.keys(fileTree)
-  keys.forEach(key =>{
+  keys.forEach(key => {
     fileTree[key] = fileTree[key].replace(/{igComponentSelector}/g, body['selector'])
     fileTree[key] = fileTree[key].replace(/{igComponentModule}/g, body['module'])
     fileTree[key] = fileTree[key].replace(/{igComponentName}/g, body['name'])
   })
-  return fileTree 
+  return fileTree
 }
 
-function replaceComponentFlags(file, body){
-  if(body['data']){
+function replaceComponentFlags(file, body) {
+  if (body['data']) {
     file = file.replace(/{igDataFile}/g, `import { ${body['data']['name']} } from "./data"`)
     file = file.replace(/{properties}/g, `public data:any;`)
     file = file.replace(/{propertiesDefinition}/g, `this.data = ${body['data']['name']};`)
   } else {
-    file = file.replace(/{igDataFile}/g,'')
+    file = file.replace(/{igDataFile}/g, '')
     file = file.replace(/{properties}/g, '')
-    file = file.replace(/{propertiesDefinition}/g,'')
+    file = file.replace(/{propertiesDefinition}/g, '')
   }
-    file = file.replace(/{igComponentSelector}/g, body['selector'])
-    file = file.replace(/{igComponentName}/g, body['name'])
-  return file 
+  file = file.replace(/{igComponentSelector}/g, body['selector'])
+  file = file.replace(/{igComponentName}/g, body['name'])
+  return file
 }
 
 app.listen(4205, () => {
