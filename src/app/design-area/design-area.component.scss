@@ -7,8 +7,9 @@
     }
 
     .igx-card{
-        width: 22%;
-        margin:auto
+        width: 20%;
+        margin: auto;
+        margin-top: 50px
     }
 }
 
@@ -18,3 +19,9 @@ igx-radio + igx-radio {
 igx-input-group + igx-input-group {
     margin-top: 14px;
 } 
+
+.checkbox-wrapper{
+    display: grid;
+}
+
+

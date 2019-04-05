@@ -1,69 +1,122 @@
-<div class="grid-card">
-  <igx-card>
+<div style="width: 450px; margin: auto">
+    <igx-select #select type="box" (onSelection)="createComponent($event.newSelection.value)">
+        <label igxLabel>Type Select</label>
+        <igx-select-item *ngFor="let grid of gridTypes" [value]="grid">
+          {{grid.name}}
+        </igx-select-item>
+      </igx-select>
+</div>
+<div class="wrapper" style="margin: auto">
+  <igx-card *ngIf = "gridObject && gridObject['name'].includes('Grid')">
     <igx-card-header>
-      <h3 class="igx-card-header__title">IgxGrid Designer</h3>
+      <h3 class="igx-card-header__title">IgxGrid</h3>
     </igx-card-header>
     <igx-card-content>
       <h4>IgxGrid Features</h4>
       <br>
-      <igx-combo #combo [data] = "features" width="400px" (onClosed)="check(combo)"></igx-combo>
+      <igx-combo #combo [data]="gridFeatures" width="200px" [valueKey]="'value'" [displayKey]="'name'" (onClosed)="check(combo.selectedItems())">
+        <!-- <span igxComboItem (change)="check($event, feature)" *ngFor="let feature of gridFeatures" [(ngModel)]="feature.value">
+          {{feature.name}}
+        </span>   -->
+      </igx-combo>
       <br>
-      <h4>Styling</h4>
-      <br>
-      <igx-radio class="styling" labelPosition="after" [value]='0' style="color:#c6538c" [(ngModel)]="styleSyntax">
-        SASS
-      </igx-radio>
-      <br>
-      <igx-radio  class="styling" labelPosition="after" [value]='1' style="color:aqua" [(ngModel)]="styleSyntax">
-        CSS
-      </igx-radio>
       <h4>Grid Dimensions</h4>
       <igx-input-group #igroup1 style="width:70px">
         <label igxLabel for="widthInput" [textContent]="'Width'"></label>
-        <input  #input igxInput id="widthInput" igxInput type="text" [(ngModel)]="width">
+        <input #input igxInput id="widthInput" igxInput type="text" [(ngModel)]="width">
         <igx-suffix style="font-size: 18px">
           {{widthResponsive? '%' : 'px'}}
         </igx-suffix>
       </igx-input-group>
-      <igx-switch #widthSwitch [checked]="true" [(ngModel)]="widthResponsive">{{widthSwitch.checked? 'Responsive' : 'Static'}} Width ({{widthSwitch.checked? '%' : 'px'}})</igx-switch>
+      <igx-switch #widthSwitch [checked]="true" [(ngModel)]="widthResponsive">
+        {{widthSwitch.checked? 'Responsive' : 'Static'}} Width ({{widthSwitch.checked? '%' : 'px'}})</igx-switch>
       <igx-input-group #igroup style="width:70px">
         <label igxLabel for="heightInput" [textContent]="'Height'"></label>
-        <input id="heightInput" igxInput type="text"  [(ngModel)]="height" >
+        <input id="heightInput" igxInput type="text" [(ngModel)]="height">
         <igx-suffix style="font-size: 18px">
-            {{heightResponsive? '%' : 'px'}}
-      </igx-suffix>
+          {{heightResponsive? '%' : 'px'}}
+        </igx-suffix>
       </igx-input-group>
-      <igx-switch #heightSwitch [checked]="false" [(ngModel)]="heightResponsive">{{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
+      <igx-switch #heightSwitch [checked]="false" [(ngModel)]="heightResponsive">
+        {{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
       <br>
-      <igx-radio [checked]="true" [value]="true" labelPosition="after" [(ngModel)]="gridObject['inputs']['autoGenerate']">
+      <!-- <igx-radio [checked]="true" [value]="true" labelPosition="after" [(ngModel)]="gridObject['inputs']['autoGenerate']">
         Auto Generate Columns
-      </igx-radio>
+      </igx-radio> -->
     </igx-card-content>
     <igx-card-actions>
-      <button igxButton="flat" igxRipple (click)="saveComponent(gridObject); combo.deselectAllItems();">
+      <button igxButton="flat" igxRipple (click)="saveComponent(); combo.deselectAllItems(); select.value = ''">
         Save
       </button>
-      <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz()">
+      <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz();  select.value = ''">
+        Open
+      </button>
+    </igx-card-actions>
+  </igx-card>
+
+  <igx-card *ngIf="gridObject && gridObject['name'].includes('Combo')">
+    <igx-card-header>
+      <h3 class="igx-card-header__title">IgxCombo</h3>
+    </igx-card-header>
+    <div style ="display: grid; margin: 10px">
+        <igx-select (onSelection)="addPropValue( $event.newSelection.value, 'valueKey')">
+            <label igxLabel>SELECT VALUE KEY </label>
+            <igx-select-item [value]="type"  *ngFor="let type of dataObjKeys">
+                {{type}}
+              </igx-select-item>
+        </igx-select>
+        <br/>  
+      <igx-select (onSelection)="addPropValue( $event.newSelection.value, 'displayKey')">
+        <label igxLabel>SELECT DISPLAY KEY </label>
+        <igx-select-item *ngFor="let type of dataObjKeys" [value]="type">
+            {{type}}
+          </igx-select-item>
+    </igx-select>
+  </div> 
+
+    <igx-card-content>
+      <h4>Features</h4>
+      <div class="checkbox-wrapper">
+        <div  *ngFor="let feature of comboFeatures">
+        <igx-checkbox #checkbox (change)="check($event, feature)">
+          {{ feature.name }}
+        </igx-checkbox>
+        <igx-select *ngIf="feature.prop.type && checkbox.checked" (onSelection)="addPropValue($event.newSelection.value, feature.prop.name)">
+            <label igxLabel>{{feature.prop.type | uppercase}} SELECT </label>
+            <igx-select-item *ngFor="let type of dataObjKeys" [value]="type">
+                {{type}}
+              </igx-select-item>
+        </igx-select>
+      </div>
+      </div>
+      <h4>Combo Dimensions</h4>
+      <igx-input-group #igroup1 style="width:70px">
+        <label igxLabel for="widthInput" [textContent]="'Width'"></label>
+        <input #input igxInput id="widthInput" igxInput type="text" [(ngModel)]="width">
+        <igx-suffix style="font-size: 18px">
+          {{widthResponsive? '%' : 'px'}}
+        </igx-suffix>
+      </igx-input-group>
+      <igx-switch #widthSwitch [checked]="true" [(ngModel)]="widthResponsive">
+        {{widthSwitch.checked? 'Responsive' : 'Static'}} Width ({{widthSwitch.checked? '%' : 'px'}})</igx-switch>
+      <igx-input-group #igroup style="width:70px">
+        <label igxLabel for="heightInput" [textContent]="'Height'"></label>
+        <input id="heightInput" igxInput type="text" [(ngModel)]="height">
+        <igx-suffix style="font-size: 18px">
+          {{heightResponsive? '%' : 'px'}}
+        </igx-suffix>
+      </igx-input-group>
+      <igx-switch #heightSwitch [checked]="false" [(ngModel)]="heightResponsive">
+        {{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
+      <br>
+    </igx-card-content>
+    <igx-card-actions>
+      <button igxButton="flat" igxRipple (click)="saveComponent();">
+        Save
+      </button>
+      <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz();  select.value = ''">
         Open
       </button>
     </igx-card-actions>
   </igx-card>
 </div>
-<!-- <igx-grid #grid data={{data}} height="500px"></igx-grid> -->
-
-<!-- <form #mainForm action="https://stackblitz.com/run" method="post" target="_blank">
-  <input type="hidden" name="project[files][src/index.html]"
-    [value]="files  | async | filterPipe: ['src' ,'index.html']">
-  <input type="hidden" name="project[files][src/main.ts]" [value]="files | async | filterPipe: ['src', 'main.ts']">
-  <input type="hidden" name="project[files][src/polyfills.ts]"
-    [value]="files | async | filterPipe: ['src' , 'polyfills.ts']">
-  <input type="hidden" name="project[files][src/styles.scss]"
-    [value]="files | async | filterPipe: ['src' , 'styles.scss']">
-  <input type="hidden" name="project[files][angular.json]"
-    [value]="files | async | filterPipe: ['required' , 'angular.json']| json">
-  <input type="hidden" name="project[dependencies]"
-    [value]="files | async | filterPipe: ['required' , 'package.json', 'dependencies'] | json">
-  <input type="hidden" name="project[template]" value="angular-cli">
-  <input type="hidden" name="project[settings]" value="{&quot;compile&quot;:{&quot;clearConsole&quot;:false}}">
-</form>
-<button (click)="mainForm.submit()">Click</button> -->
