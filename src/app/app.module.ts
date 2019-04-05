@@ -8,7 +8,15 @@ import {IgxGridModule,
        IgxComboModule,
        IgxRadioModule,
        IgxGridComponent,
-       IgxSwitchModule
+       IgxSwitchModule,
+       IgxDropDownModule,
+       IgxHierarchicalGridModule,
+       IgxTreeGridModule,
+       IgxSelectModule,
+       IgxHierarchicalGridComponent,
+       IgxTreeGridComponent,
+       IgxComboComponent,
+       IgxCheckboxModule
       } from 'igniteui-angular';
 
 import { AppComponent } from './app.component';
@@ -39,11 +47,16 @@ import { DataService } from './data.service';
     IgxComboModule,
     IgxRadioModule,
     HttpClientModule,
-    IgxSwitchModule
+    IgxSwitchModule,
+    IgxDropDownModule,
+    IgxHierarchicalGridModule,
+    IgxTreeGridModule,
+    IgxSelectModule,
+    IgxCheckboxModule
   ],
   providers: [DataService],
   bootstrap: [AppComponent],
-  entryComponents: [IgxGridComponent]
+  entryComponents: [IgxGridComponent, IgxHierarchicalGridComponent, IgxTreeGridComponent, IgxComboComponent]
 })
 export class AppModule {
 
