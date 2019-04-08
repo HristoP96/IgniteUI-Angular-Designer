@@ -22,7 +22,7 @@ export const GridFeatures: any[] = [
 ];
 export const ComboFeatures: any[] = [
     { name: 'Filtering', prop: 'filterable', value: false },
-    { name: 'Allow Custom Values', prop: 'customValues', value: false },
+    { name: 'Allow Custom Values', prop: 'allowCustomValues', value: false },
 ];
 
 export const CalendarFeatures: IgxComponentFeature[] = [
