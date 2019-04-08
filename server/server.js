@@ -99,12 +99,13 @@ app.route('/api/form').post((req, res) => {
 
   // Add the data in the date file 
   if (req.body['data']) {
-    componentFiles["data.ts"] = `export const ${req.body['data']['name']} = ${JSON.stringify(req.body['data']['value'], null, 2)}`
+    componentFiles["data.ts"] = `export const ${req.body['data']['name']} = ${JSON.stringify(req.body['inputs']['data'], null, 2)}`
   }
 
   //Initialize sample component
   componentFiles[`${req.body['selector']}.component.ts`] = replaceComponentFlags(componentTsTemplate, req.body)
-  componentFiles[`${req.body['selector']}.component.html`] = req.body['template']
+  componentFiles[`${req.body['selector']}.component.html`] = buildComponentTemplate(req.body)
+  console.log(buildComponentTemplate(req.body))
   componentFiles[`${req.body['selector']}.component.scss`] = ''
 
   allFilesTree['src']['app'][`${req.body['selector']}`] = componentFiles
@@ -143,7 +144,7 @@ function replaceFlags(fileTree, body) {
 function replaceComponentFlags(file, body) {
   if (body['data']) {
     file = file.replace(/{igDataFile}/g, `import { ${body['data']['name']} } from "./data"`)
-    file = file.replace(/{properties}/g, `public data:any;`)
+    file = file.replace(/{properties}/g, `public data: any;`)
     file = file.replace(/{propertiesDefinition}/g, `this.data = ${body['data']['name']};`)
   } else {
     file = file.replace(/{igDataFile}/g, '')
@@ -153,6 +154,78 @@ function replaceComponentFlags(file, body) {
   file = file.replace(/{igComponentSelector}/g, body['selector'])
   file = file.replace(/{igComponentName}/g, body['name'])
   return file
+}
+
+function buildComponentTemplate(body) {
+  var inputs = body['inputs'];
+  if(body['selector'].includes('grid')){
+    return buildGridTemplate(body);
+  }
+
+ return ` <${body['selector']} ${Object.keys(inputs).map( key =>{
+    if(typeof inputs[key] === 'object'){
+      return `[${key}]="${key}"`
+    } else if(typeof inputs[key] === 'string'){
+      return `[${key}]="'${inputs[key]}'"`
+    }
+    return `${key}="${inputs[key]}"`}).join(" ")}> 
+</${body['selector']}>`
+}
+ var body = {};
+function buildGridTemplate(body){
+  var inputs = body['inputs'];
+  var baseString = `<${body['selector']} ${Object.keys(inputs).map( key =>{
+    if(typeof inputs[key] === 'object'){
+      return `[${key}]="${key}"`
+    } else if(typeof inputs[key] === 'string'){
+      return `[${key}]="'${inputs[key]}'"`
+    }
+    return `${key}="${inputs[key]}"`}).join(" ")}>`
+  switch(body['name']){
+    case 'IgxGridComponent':
+    return `${baseString}</${body['selector']}>`;
+
+    case 'IgxTreeGridComponent':
+
+    return `${baseString}${Object.keys(inputs['data'][0]).map(key => {
+        if(inputs['childDataKey'] !== key){
+          return `\n<igx-column [field]="'${key}'" dataType=${isDate(inputs['data'][0][key])? "'date'":`"${typeof inputs['data'][0][key]}"`}> </igx-column>\n` 
+        }
+      }).join("")}</${body['selector']}>`
+
+      case 'IgxHierarchicalGridComponent':
+      return `${baseString}${Object.keys(inputs['data'][0]).map(key => {
+          if(!(typeof inputs['data'][0][key] === 'object' && !(inputs['data'][0][key] instanceof Date))){
+            return `\n<igx-column [field]="'${key}'"> </igx-column>\n` 
+          }
+      }).join('')}${Object.keys(inputs['data'][0]).map(key => {
+        if (typeof inputs['data'][0][key] === 'object' && !(inputs['data'][0][key] instanceof Date)) {
+          return iterate(inputs['data'][0][key], key);
+        }
+      }).join('')}\n</${body['selector']}>`;
+  }
+}
+
+function iterate(data, key){
+ var record = data;
+   var str = '';
+   var child;
+    Object.values(record).forEach(obj => {
+      str = `\n<igx-row-island autoGenerate="true"  [key]="'${key}'">\n
+      ${Object.keys(obj).map(k => {
+        if (typeof obj[k] === 'object' && !(obj[k] instanceof Date)) {
+           child = `${iterate(obj[k], k)}`;
+        }
+      }).join('')} \n${ child ? child : ''}\n </igx-row-island>`;
+    });
+    return str;
+  }
+
+function isDate(record) {
+  if(typeof(record) === 'string'){
+    return !isNaN(Date.parse(record));
+  }
+  return false
 }
 
 app.listen(4205, () => {

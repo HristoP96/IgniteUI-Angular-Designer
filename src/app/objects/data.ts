@@ -1,5 +1,5 @@
 /* tslint:disable */
-export const DATA: any[] = [{
+export const DATA: any[] =   [{
     ProductID: 1,
     ProductName: "Chai",
     QuantityPerUnit: "10 boxes x 20 bags",
@@ -7,7 +7,7 @@ export const DATA: any[] = [{
     UnitsInStock: 39,
     ReorderLevel: 10,
     Discontinued: false,
-    OrderDate: new Date("2012-02-12")
+    OrderDate: `new Date("2012-02-12")`
 }, {
     ProductID: 2,
     ProductName: "Chang",
