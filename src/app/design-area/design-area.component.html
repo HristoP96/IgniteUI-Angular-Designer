@@ -1,6 +1,6 @@
 <div style="width: 450px; margin: auto">
-  <igx-select #select type="box" (onSelection)="deleteObj(); createComponent($event.newSelection.value)">
-    <label igxLabel>Type Select</label>
+  <igx-select #select type="box" (onSelection)="deleteObj(); createComponent($event.newSelection.value);">
+    <label igxLabel>Select Component</label>
     <igx-select-item *ngFor="let component of components" [value]="component">
       {{component.name}}
     </igx-select-item>
@@ -13,7 +13,7 @@
       <h3 class="igx-card-header__title">{{type.name}}</h3>
     </igx-card-header>
     <igx-card-content>
-      <igx-select *ngIf="type.obj.subTypes" #select (onSelection)="createComponent($event.newSelection.value)">
+      <igx-select *ngIf="type.obj.subTypes" #subtypesSelect (onSelection)="createComponent($event.newSelection.value); select.value = null">
         <label igxLabel>Type Select</label>
         <igx-select-item *ngFor="let subType of type.obj.subTypes" [value]="subType">
           {{subType.name}}
@@ -21,12 +21,15 @@
       </igx-select>
       <div *ngIf="igxComponentObject">
           <div style="display: grid; margin: 10px" *ngIf="getKeyProps().length !== 0">
-            <igx-select *ngFor="let key of getKeyProps()" (onSelection)="addPropValue($event.newSelection.value, key)">
+            <div  *ngFor="let key of getKeyProps()">
+            <igx-select #keySelect (onSelection)="addPropValue($event.newSelection.value, key)">
                 <label igxLabel>SELECT {{key | slice:0: key.toLowerCase().indexOf('key') | uppercase}} {{key | slice: key.toLowerCase().indexOf('key') | uppercase}}</label> 
-              <igx-select-item *ngFor="let type of dataObjKeys" [value]="type">
-                    {{type}}
+              <igx-select-item *ngFor="let k of dataObjKeys" [value]="k">
+                    {{k}}
                   </igx-select-item>
             </igx-select>
+            <button igxButton igxRipple (click)="keySelect.value = null; addPropValue(null, key)">Clear Selection</button>
+          </div>
             </div>
         <h4>Features</h4>
         <div class="checkbox-wrapper">
@@ -59,79 +62,13 @@
         <br>
       </div>
     </igx-card-content>
-    <igx-card-actions>
+    <igx-card-actions *ngIf="igxComponentObject">
       <button igxButton="flat" igxRipple (click)="saveComponent(); select.value = ''">
-        Save
+        Generate
       </button>
       <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz();  select.value = ''">
-        Open
+        View On StackBLitz
       </button>
     </igx-card-actions>
   </igx-card>
-
-  <!-- <igx-card *ngIf="igxComponentObject && igxComponentObject['name'].includes('Combo')">
-    <igx-card-header>
-      <h3 class="igx-card-header__title">IgxCombo</h3>
-    </igx-card-header>
-    <div style="display: grid; margin: 10px">
-      <igx-select (onSelection)="addPropValue( $event.newSelection.value, 'valueKey')">
-        <label igxLabel>SELECT VALUE KEY </label>
-        <igx-select-item [value]="type" *ngFor="let type of dataObjKeys">
-          {{type}}
-        </igx-select-item>
-      </igx-select>
-      <br />
-      <igx-select (onSelection)="addPropValue( $event.newSelection.value, 'displayKey')">
-        <label igxLabel>SELECT DISPLAY KEY </label>
-        <igx-select-item *ngFor="let type of dataObjKeys" [value]="type">
-          {{type}}
-        </igx-select-item>
-      </igx-select>
-    </div>
-    <igx-card-content>
-      <h4>Features</h4>
-      <div class="checkbox-wrapper">
-        <div *ngFor="let feature of features">
-          <igx-checkbox #checkbox (change)="check($event, feature)">
-            {{ feature.name }}
-          </igx-checkbox>
-          <igx-select *ngIf="feature.prop.type && checkbox.checked"
-            (onSelection)="addPropValue($event.newSelection.value, feature.prop.name)">
-            <label igxLabel>{{feature.prop.type | uppercase}} SELECT </label>
-            <igx-select-item *ngFor="let type of dataObjKeys" [value]="type">
-              {{type}}
-            </igx-select-item>
-          </igx-select>
-        </div>
-      </div>
-      <h4>Combo Dimensions</h4>
-      <igx-input-group #igroup1 style="width:70px">
-        <label igxLabel for="widthInput" [textContent]="'Width'"></label>
-        <input #input igxInput id="widthInput" igxInput type="text" [(ngModel)]="width">
-        <igx-suffix style="font-size: 18px">
-          {{widthResponsive? '%' : 'px'}}
-        </igx-suffix>
-      </igx-input-group>
-      <igx-switch #widthSwitch [checked]="true" [(ngModel)]="widthResponsive">
-        {{widthSwitch.checked? 'Responsive' : 'Static'}} Width ({{widthSwitch.checked? '%' : 'px'}})</igx-switch>
-      <igx-input-group #igroup style="width:70px">
-        <label igxLabel for="heightInput" [textContent]="'Height'"></label>
-        <input id="heightInput" igxInput type="text" [(ngModel)]="height">
-        <igx-suffix style="font-size: 18px">
-          {{heightResponsive? '%' : 'px'}}
-        </igx-suffix>
-      </igx-input-group>
-      <igx-switch #heightSwitch [checked]="false" [(ngModel)]="heightResponsive">
-        {{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
-      <br>
-    </igx-card-content>
-    <igx-card-actions>
-      <button igxButton="flat" igxRipple (click)="saveComponent();">
-        Save
-      </button>
-      <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz();  select.value = ''">
-        Open
-      </button>
-    </igx-card-actions>
-  </igx-card> -->
 </div>

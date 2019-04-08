@@ -115,7 +115,7 @@ export class DesignAreaComponent implements OnInit {
       this.igxComponentObject['inputs']['height'] = this.heightResponsive ? this.height + '%' : this.height + 'px';
     }
 
-   // this.igxComponentObject['inputs'] = this.igxComponentObject['inputs'].filter(input => input ? true : false);
+    // this.igxComponentObject['inputs'] = this.igxComponentObject['inputs'].filter(input => input ? true : false);
     const keys = Object.keys(component['inputs']);
     keys.forEach(key => {
       if (!this.igxComponentObject['inputs'][key]) {
@@ -248,6 +248,32 @@ export class DesignAreaComponent implements OnInit {
 
   // public resolveHierarchicalHridComponent(template) {
 
+  // }
+
+  // private iterate(data, key) {
+  //   let record = data;
+  //   let str = '';
+  //   let child;
+  //   Object.values(record).forEach(obj => {
+  //     str = `\n<igx-row-island autoGenerate="true"  [key]="'${key}'">\n
+  //     ${Object.keys(obj).map(k => {
+  //       if (typeof obj[k] === 'object' && !(obj[k] instanceof Date)) {
+  //          child = `${this.iterate(obj[k], k)}`;
+  //       }
+  //     }).join('')} \n${ child ? child : ''}\n </igx-row-island>`;
+  //   });
+  //   return str;
+  // }
+
+  // private test(data) {
+  //   let res ;
+  //   res = `${Object.keys(data[0]).map(key => {
+  //     if (typeof data[0][key] === 'object') {
+  //       return this.iterate(data[0][key], key);
+  //     }
+  //   }).join('')}`;
+  //   console.log(res);
+  //   return res;
   // }
 }
 
