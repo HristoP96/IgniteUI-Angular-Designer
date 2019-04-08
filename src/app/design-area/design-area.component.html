@@ -50,7 +50,8 @@
         </igx-input-group>
         <igx-switch #widthSwitch [checked]="true" [(ngModel)]="widthResponsive">
           {{widthSwitch.checked? 'Responsive' : 'Static'}} Width ({{widthSwitch.checked? '%' : 'px'}})</igx-switch>
-        <igx-input-group #igroup style="width:70px">
+          <div *ngIf="igxComponentObject['inputs']['height']">
+        <igx-input-group  #igroup style="width:70px">
           <label igxLabel for="heightInput" [textContent]="'Height'"></label>
           <input id="heightInput" igxInput type="text" [(ngModel)]="height">
           <igx-suffix style="font-size: 18px">
@@ -61,9 +62,10 @@
           {{heightSwitch.checked? 'Responsive' : 'Static'}} Height ({{heightSwitch.checked? '%' : 'px'}})</igx-switch>
         <br>
       </div>
+      </div>
     </igx-card-content>
     <igx-card-actions *ngIf="igxComponentObject">
-      <button igxButton="flat" igxRipple (click)="saveComponent(); select.value = ''">
+      <button igxButton="flat" igxRipple (click)="saveComponent();">
         Generate
       </button>
       <button igxButton="flat" [disabled]="!project" igxRipple (click)="openStackBlitz();  select.value = ''">

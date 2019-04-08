@@ -107,7 +107,6 @@ export class DesignAreaComponent implements OnInit {
 
   public saveComponent() {
     const component = this.igxComponentObject;
-    const template = this.renderer.createElement(component['selector']);
     if (this.width) {
       this.igxComponentObject['inputs']['width'] = this.widthResponsive ? this.width + '%' : this.width + 'px';
     }
@@ -115,32 +114,13 @@ export class DesignAreaComponent implements OnInit {
       this.igxComponentObject['inputs']['height'] = this.heightResponsive ? this.height + '%' : this.height + 'px';
     }
 
-    // this.igxComponentObject['inputs'] = this.igxComponentObject['inputs'].filter(input => input ? true : false);
     const keys = Object.keys(component['inputs']);
     keys.forEach(key => {
       if (!this.igxComponentObject['inputs'][key]) {
         delete this.igxComponentObject['inputs'][key];
       }
     });
-    // template.removeAttribute('_ngcontent-c1');
 
-    // const result = {};
-
-    // result['template'] = template.outerHTML.replace('data', '[data]');
-    // keys.forEach(key => {
-    //   if (result['template'].includes(key.toLocaleLowerCase())) {
-    //     result['template'] = result['template'].replace(key.toLocaleLowerCase(), key);
-    //   }
-    // });
-    // Object.keys(this.igxComponentObject['inputs']).forEach(key => {
-    //   if (key !== 'data' && key !== 'autoGenerate') {
-    //     this.igxComponentObject['inputs'][key] = undefined;
-    //   }
-    // });
-    // result['selector'] = component['selector'];
-    // result['name'] = component['name'];
-    // result['module'] = component['module'];
-    // result['data'] = this.data;
     this.service.postData(this.igxComponentObject);
 
   }
@@ -182,7 +162,9 @@ export class DesignAreaComponent implements OnInit {
     factory.inputs.forEach(input => {
       if (input['templateName'] === 'data') {
         this.igxComponentObject['inputs'][input['templateName']] = this.data;
-      } else {
+      } else if (input['templateName'] === 'height') {
+        this.igxComponentObject['inputs'][input['templateName']] = 1;
+      } else  {
         this.igxComponentObject['inputs'][input['templateName']] = undefined;
       }
     });
@@ -194,61 +176,6 @@ export class DesignAreaComponent implements OnInit {
     this.igxComponentObject['name'] = factory.componentType.name;
     this.igxComponentObject['module'] = factory.componentType.name.replace('Component', 'Module');
   }
-
-  // public resolveData(obj) {
-  //   const firstElement = obj.data[0];
-  //   let result;
-  //   if (Object.values(firstElement).every(value => typeof value !== 'object' || value instanceof Date)) {
-  //     result = {type: 'flat'};
-  //   } else if (obj.type.name.includes('Tree')) {
-  //     const childDataKey = Object.keys(firstElement)
-  //       .find(key => typeof firstElement[key] === 'object' && !(firstElement[key] instanceof Date));
-  //     const  fields = Object.keys(firstElement).filter(keys => keys !== childDataKey);
-  //     result = {childDataKey: childDataKey, type: 'tree', fields: fields};
-  //   } else {
-  //     result = this.resolveHierarchicalData(firstElement);
-
-  //   }
-  //   return result;
-  // }
-
-  // public resolveHierarchicalData(data) {
-  //   const obj: HierarchicalStructure = {
-  //     tree: []
-  //   };
-  //   const keys = new Set<string>();
-  //   Object.keys(data).forEach(key => {
-  //     if (data[key] && typeof data[key] === 'object' && !(data[key] instanceof Date)) {
-  //       obj['tree'].push({ key: key, level: 1 });
-  //       Object.values(data[key]).forEach(val =>
-  //         Object.keys(val).forEach(childKey => {
-  //           if (typeof val[childKey] === 'object' && !(val[childKey] instanceof Date)) {
-  //             keys.add(childKey);
-  //           }
-  //         }));
-  //       if (keys.values().next().value) {
-  //         obj['tree'].push({ key: keys.values().next().value, parent: key, level: 2 });
-  //       }
-  //     }
-  //   });
-  //   return {tree: obj, maxLevel: 2, type: 'hierarchical'};
-  // }
-
-  // public resolveTreeGridComponent(template) {
-  //   const fields = this.igxComponentObject['data']['structure']['fields'];
-  //   const childDataKey = this.igxComponentObject['data']['structure']['childDataKey'];
-  //   template.setAttribute('childDataKey', childDataKey);
-  //   for (let index = 0; index < fields.length; index++) {
-  //     const col = this.renderer.createElement('igx-column');
-  //     col.setAttribute('name', fields[index]);
-  //     col.removeAttribute('_ngcontent-c1');
-  //     template.append(col);
-  //   }
-  // }
-
-  // public resolveHierarchicalHridComponent(template) {
-
-  // }
 
   // private iterate(data, key) {
   //   let record = data;

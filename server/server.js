@@ -183,7 +183,9 @@ function buildGridTemplate(body){
     return `${key}="${inputs[key]}"`}).join(" ")}>`
   switch(body['name']){
     case 'IgxGridComponent':
-    return `${baseString}</${body['selector']}>`;
+    return `${baseString}${Object.keys(inputs['data'][0]).map(key => {
+        return `\n<igx-column [field]="'${key}'"> </igx-column>\n` 
+    }).join("")}</${body['selector']}</${body['selector']}>`;
 
     case 'IgxTreeGridComponent':
 
