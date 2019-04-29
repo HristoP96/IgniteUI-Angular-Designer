@@ -24,9 +24,10 @@ export class ComponentTemplateBuilder {
 
     private addChildNodes(component: Component) {
         let builder = '';
-        if (component.childNodes) {
-            component.childNodes.forEach((child) => {
-                builder = this.generateTemplate(child);
+        if (component.children.length !== 0) {
+            component.children.forEach((child) => {
+                child.template = this.generateTemplate(child);
+                builder += child.template;
             });
             return '\t' + builder;
         }

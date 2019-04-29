@@ -1,37 +1,31 @@
-interface IInput {
+export interface IInput {
     name: string;
     value: string | number | boolean | object;
 }
 
-interface IData {
+export interface IData {
     name: string;
     value: any;
-
 }
-export class Component {
-    public data: object;
+export abstract class Component {
     public selector: string;
-    public inputs: IInput[];
+    public abstract inputs: IInput[];
+    public abstract children: Component[];
+    public abstract template: string;
     public name: string;
     public templateInstance: string;
     public module: string;
-    public childNodes: Component[];
-
-    constructor(data: object,
-                selector: string,
-                inputs: IInput[],
+    constructor(selector: string,
                 name: string,
-                module: string,
-                childNodes?: Component[]) {
-        this.data = data;
+                templateInstance: string,
+                module?: string
+                ) {
         this.selector = selector;
-        this.inputs = inputs;
-        this.templateInstance = `#${this.selector.substr(this.selector.indexOf('-') + 1)}`;
+        this.templateInstance = `#${templateInstance}`;
         this.name = name;
-        this.module = module;
-        if (childNodes) {
-        this.childNodes = childNodes;
+        if (module) {
+            this.module = module;
         }
     }
-
+    public abstract setInputs(): void;
 }
