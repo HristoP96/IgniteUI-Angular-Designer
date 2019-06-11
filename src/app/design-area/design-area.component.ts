@@ -5,14 +5,14 @@ import {
 import { IgxGridComponent, IgxDropDownComponent, ConnectedPositioningStrategy } from 'igniteui-angular';
 import { IgxHierarchicalGridComponent } from 'igniteui-angular';
 import { IgxTreeGridComponent, IgxComboComponent } from 'igniteui-angular';
-import { SINGERS } from '../objects/hierarchical-data';
-import { EMPLOYEE_DATA } from '../objects/tree-data';
-import { DATA } from '../objects/data';
+// import { SINGERS } from '../objects/hierarchical-data';
+// import { EMPLOYEE_DATA } from '../objects/tree-data';
+// import { DATA } from '../objects/data';
 import { DataService } from '../data.service';
 import { Observable } from 'rxjs';
 import { GridFeatures, ComboFeatures, IgxComponentFeature } from '../objects/features';
 import { ComboData } from '../objects/combo-data';
-import sdk from '@stackblitz/sdk';
+// import sdk from '@stackblitz/sdk';
 import { keyframes } from '@angular/animations';
 import { componentFactoryName } from '@angular/compiler';
 
@@ -40,14 +40,14 @@ export class DesignAreaComponent implements OnInit {
 
   public gridTypes: IgxComponent[] = [
     {
-      name: 'IgxHierarchicalGrid', obj: { type: IgxHierarchicalGridComponent, data: SINGERS, dataName: 'SINGERS' },
+      name: 'IgxHierarchicalGrid', obj: { type: IgxHierarchicalGridComponent, data: 'SINGERS', dataName: 'SINGERS' },
       features: GridFeatures
     },
     {
-      name: 'IgxTreeGrid', obj: { type: IgxTreeGridComponent, data: EMPLOYEE_DATA, dataName: 'EMPLOYEE_DATA' },
+      name: 'IgxTreeGrid', obj: { type: IgxTreeGridComponent, data: 'EMPLOYEE_DATA', dataName: 'EMPLOYEE_DATA' },
       features: GridFeatures
     },
-    { name: 'IgxGrid', obj: { type: IgxGridComponent, data: DATA, dataName: 'DATA' }, features: GridFeatures }
+    { name: 'IgxGrid', obj: { type: IgxGridComponent, data: 'DATA', dataName: 'DATA' }, features: GridFeatures }
   ];
   public files: Observable<any>;
   public components: IgxComponent[] = [
@@ -125,7 +125,7 @@ export class DesignAreaComponent implements OnInit {
 
   }
   public openStackBlitz() {
-    sdk.openProject(this.project);
+   // sdk.openProject(this.project);
     this.width = '';
     this.height = '';
     this.project = undefined;
@@ -202,5 +202,10 @@ export class DesignAreaComponent implements OnInit {
   //   console.log(res);
   //   return res;
   // }
+
+  public testEv(arg) {
+    const reader = new FileReader();
+    reader.readAsText(arg.target.files[0]);
+  }
 }
 

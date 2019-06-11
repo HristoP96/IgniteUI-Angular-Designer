@@ -7,11 +7,25 @@ import { TsFileBuilder } from './TsFileBuilder';
 
 export class ProjectFilesGenerator {
     public files: IFiles;
-    private tsFile: string;
-    private templateFile: string;
-    private stylingFile: string = '';
-    private dataFile: string;
-    constructor(public component: Component, private ctb: ComponentTemplateBuilder, private tfb: TsFileBuilder ) {
+    private tsFileContent: string;
+    private templateFileContent: string;
+    private stylingFileContent: string = '';
+    private dataFileContent: string;
+    private dependenciesContent: string;
+    private angularFileContent: string;
+    private globalStylesFileContent: string;
+    private ctb: ComponentTemplateBuilder;
+    private tfb: TsFileBuilder;
+    private component: Component;
+
+    constructor(component: Component) {
+        this.component =  component;
+        this.ctb = new ComponentTemplateBuilder();
+        this.tfb = new TsFileBuilder(component);
+    }
+
+    private generateSrcFiles( ){
+        this.templateFileContent = this.ctb.generateTemplate(this.component);
 
     }
 }

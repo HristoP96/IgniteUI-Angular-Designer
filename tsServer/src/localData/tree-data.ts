@@ -1,4 +1,5 @@
-export const EMPLOYEE_DATA = [
+
+export const DATA: any[] = [
     {
         Age: 55,
         Employees: [

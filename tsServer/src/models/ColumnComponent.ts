@@ -8,7 +8,7 @@ export enum ColumnDataType {
 }
 export class ColumnComponent extends Component {
 
-    public static num = 0;
+    private static num = 0;
     public inputs: IInput[];
     public template: string;
     public field: string;
@@ -29,6 +29,7 @@ export class ColumnComponent extends Component {
         this.field = field;
         this.header = this.setHeader(field);
         this.dataType = dataType;
+        this.setInputs();
     }
 
     public setInputs(): void {
@@ -55,9 +56,16 @@ export class ColumnComponent extends Component {
     }
 
     private setHeader(field: string): string {
-        let res = ' ';
-        field.split(RegExp('A-Z')).forEach((part) =>
-            res += part);
+        let res = '';
+        const upperCaseChars = field.match(/[A-Z]{1,}/g);
+        for (let index = 0; index < upperCaseChars.length; index++) {
+            if (!(index === upperCaseChars.length - 1)) {
+                res += field.substring(field.indexOf(upperCaseChars[index]),
+                      field.indexOf(upperCaseChars[index + 1])) + ' ';
+            } else {
+                res += field.substring(field.indexOf(upperCaseChars[index]));
+            }
+        }
         return res;
     }
 

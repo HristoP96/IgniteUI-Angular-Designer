@@ -1,7 +1,8 @@
 import {ComponentTemplateBuilder} from '../engine/TemplateBuilder';
-import { Component } from './Component';
+import { Component } from '../models/Component';
+import { ITemplateGenerator } from './ITemplateGenerator';
 
-export class IgxGridProjectFiles {
+export class IgxGridTemplate  {
 
    public gridTemplate: string;
 

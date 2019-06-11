@@ -1,4 +1,5 @@
 import { ComponentTemplateBuilder } from '../../engine/TemplateBuilder';
+import {DATA} from '../../localData/data';
 import { ColumnComponent, ColumnDataType } from '../ColumnComponent';
 import { Component, IInput } from '../Component';
 import { GridModel } from './GridModel';
@@ -12,7 +13,10 @@ export class GridComponent extends GridModel {
             'IgxGridComponent',
             'grid',
             'IgxGridModule');
+        this.data = DATA;
+        this.primaryKey = 'ProductID';
         this.setInputs();
+        this.setChildren();
     }
 
     public setInputs(): void {
@@ -47,7 +51,15 @@ export class GridComponent extends GridModel {
     }
 
     public generateGridTemplate(): void {
-        this.template = new ComponentTemplateBuilder().generateTemplate(this);
+        const ctb =  new ComponentTemplateBuilder();
+        this.template = ctb.generateTemplate(this);
+    }
+
+    public addData(custom?: Blob) {
+        if (custom) {
+            const reader = new FileReader();
+            reader.readAsText(custom);
+        }
     }
 
     private getColumnType(value: any) {

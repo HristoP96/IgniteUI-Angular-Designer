@@ -6,10 +6,13 @@ import { Observable, Subject } from 'rxjs';
 })
 export class DataService {
 
-  data: Observable<any>;
   project: Subject<any>;
+  data: Subject<any>;
   constructor(private http: HttpClient) {
+
     this.project = new Subject<{}>();
+    this.data = new Subject<{}>();
+
   }
 
   public getData () {
@@ -23,5 +26,9 @@ export class DataService {
         this.project.next(answer);
       }
     });
+  }
+
+  public resolveData(par: any) {
+    this.http.post<string>('http://localhost:4205/data', par).subscribe();
   }
 }

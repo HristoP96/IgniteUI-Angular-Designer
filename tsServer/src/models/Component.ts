@@ -15,6 +15,7 @@ export abstract class Component {
     public name: string;
     public templateInstance: string;
     public module: string;
+    public inputsForDataBind: Map<string, any>;
     constructor(selector: string,
                 name: string,
                 templateInstance: string,
