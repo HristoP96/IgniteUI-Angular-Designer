@@ -14,12 +14,13 @@ app.get( '/', ( req: any, res: any ) => {
 // start the Express server
 app.listen( port, () => {
     const grid = new GridComponent();
+    grid.paging = true;
     grid.generateGridTemplate();
 
     // tslint:disable-next-line:no-console
     console.log( `server started at http://localhost:${ port }` );
 // tslint:disable-next-line: no-console
-    console.log(grid);
+    console.log(grid.template);
 } );
 
 app.post( '/data', ( req: Request, res: Response ) => {
