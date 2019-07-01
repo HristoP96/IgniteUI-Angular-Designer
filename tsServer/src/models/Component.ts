@@ -28,11 +28,14 @@ export abstract class Component {
   public templateInstance: string;
   public module: string;
   public inputsForDataBind: Map<string, any>;
+  public templateVariables: string[];
+
   constructor(
     selector: string,
     name: string,
     templateInstance: string,
-    module?: string
+    module?: string,
+    templateVars?: [string]
   ) {
     this.selector = selector;
     this.templateInstance = `#${templateInstance}`;
@@ -40,6 +43,9 @@ export abstract class Component {
     this.inputsForDataBind = new Map<string, any>();
     if (module) {
       this.module = module;
+    }
+    if (templateVars) {
+      this.templateVariables = templateVars;
     }
   }
   public setInputs(): void {
@@ -53,7 +59,8 @@ export abstract class Component {
       name: this.name,
       selector: this.selector,
       template: this.template,
-      templateInstance: this.templateInstance
+      templateInstance: this.templateInstance,
+      templateVariables: this.templateVariables
     };
 
     const componentObject = Object.create(this);

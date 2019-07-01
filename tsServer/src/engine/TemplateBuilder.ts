@@ -1,8 +1,9 @@
 import { Component } from '../models/Component';
 import { GridComponent } from '../models/grids/GridComponent';
+import { ITemplateGenerator } from '../models/ITemplateGenerator';
 import { TsFileBuilder } from './TsFileBuilder';
 
-export class ComponentTemplateBuilder {
+export class ComponentTemplateBuilder implements ITemplateGenerator {
   public inputsForBinding: Map<string, any>;
 
   constructor() {
@@ -21,7 +22,7 @@ ${ this.closeOuterTemplate(component)}`;
     return res;
   }
 
-  private openOuterTemplate(component: Component): string {
+  public openOuterTemplate(component: Component): string {
     let builder = '';
     const open = '<';
     const selector = component.selector;
@@ -31,7 +32,7 @@ ${ this.closeOuterTemplate(component)}`;
     return builder;
   }
 
-  private addChildNodes(component: Component) {
+  public addChildNodes(component: Component) {
     let builder = '';
     if (component.children.length !== 0) {
       component.children.forEach((child) => {
@@ -43,7 +44,7 @@ ${ this.closeOuterTemplate(component)}`;
     return builder;
   }
 
-  private closeOuterTemplate(component: Component): string {
+  public closeOuterTemplate(component: Component): string {
     const open = '<';
     const selector = component.selector;
     const close = '>';
@@ -96,8 +97,3 @@ ${ this.closeOuterTemplate(component)}`;
 
 }
 // new ComponentTemplateBuilder().generateTemplate(new GridComponent());
-
-// tslint:disable-next-line:max-classes-per-file
-export class DirectiveTemplateBuilder {
-
-}
