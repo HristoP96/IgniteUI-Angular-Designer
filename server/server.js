@@ -18,25 +18,10 @@ var project = {
 var mainTs = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/main.ts.template"), 'utf8')
 var polyfills = fs.readFileSync(path.join(__dirname, "./srcFiles_templates/polyfills.ts.template"), 'utf8')
 var packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, `../package.json`), 'utf8'))
+
+var data;
 const app = express()
 
-// fs.readdir(srcDir, (err, files) => {
-//   files.forEach(file => {
-//     if (file.includes('polyfills') || file.includes('.html') || file.includes('.scss')) {
-//       srcFiles[file] = fs.readFileSync(path.join(__dirname, `${srcDir + file}`), 'utf8')
-//     }
-//   })
-// })
-
-// fs.readdir('../', (err, files) => {
-//   files.forEach(file => {
-//     if (file.includes('package.json') ) {
-//       jsonFiles["package.json"] = JSON.parse(fs.readFileSync(path.join(__dirname, `../${file}`), 'utf8'))
-//     }else if( file.includes('angular.json') ){
-//       jsonFiles["angular.json"] = JSON.parse(fs.readFileSync(path.join(__dirname, `../${file}`), 'utf8'))
-//     }
-//   })
-// })
 
 var corsOptions = {
   origin: 'http://localhost:4200',
@@ -82,11 +67,6 @@ app.route('/api/form').post((req, res) => {
   angularJson = JSON.parse(fs.readFileSync(path.join(__dirname, "./srcFiles_templates/angular.json.template"), 'utf8'))
   projectFiles["angular.json"] = JSON.stringify(angularJson, null, 2)
 
-  // srcFiles["styles.css"] = postcss([autoprefixer({browsers: ["last 5 versions", "> 3%"], grid: true})])
-  //                         .process(fs.readFileSync(path.join(__dirname, "../srcFiles_templates/styles.scss.template"), 'utf8')).css.toString()
-  // project['files']["angular.json"] = JSON.stringify(fs.readFileSync(path.join(__dirname, "./css_support_templates/angular-css-support.json.template")), null, 2)
-
-
   // Add source files to the files tree
   allFilesTree['src'] = srcFiles;
 
@@ -99,6 +79,7 @@ app.route('/api/form').post((req, res) => {
 
   // Add the data in the date file 
   if (req.body['data']) {
+    console.log(req.body['inputs']['data'])
     componentFiles["data.ts"] = `export const ${req.body['data']['name']} = ${JSON.stringify(req.body['inputs']['data'], null, 2)}`
   }
 
@@ -119,6 +100,9 @@ app.route('/api/form').post((req, res) => {
   res.send(project)
 })
 
+app.route('/data').post((req, res) => {
+  data = fs.readFileSync(path.join(__dirname, '../src/app/'+ req.body["path"]), 'utf8')
+})
 function getFilesPath(startDir, fileTree, path, projectFiles) {
 
   if (typeof fileTree[startDir] !== 'object') {

@@ -41,3 +41,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# live-editing
+/live-editing
+/server/node_modules
+/tsServer/node_modules
+/tsServer/dist

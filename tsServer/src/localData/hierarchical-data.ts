@@ -1,5 +1,5 @@
 /* tslint:disable */
-export const SINGERS = [
+export const DATA = [
     {
         "Artist": "Naomí Yepes",
         "Photo":"https://staging.infragistics.local/angular-demos/assets/images/hgrid/naomi.png",
