@@ -1,8 +1,8 @@
 import { Component } from '../models/Component';
 import { GridComponent } from '../models/grids/GridComponent';
 import { ITemplateGenerator } from '../models/ITemplateGenerator';
-import { TsFileBuilder } from './TsFileBuilder';
 import { NgTemplateBuilder } from './NgTemplateBuilder';
+import { TsFileBuilder } from './TsFileBuilder';
 
 export class ComponentTemplateBuilder implements ITemplateGenerator {
   public inputsForBinding: Map<string, any>;
