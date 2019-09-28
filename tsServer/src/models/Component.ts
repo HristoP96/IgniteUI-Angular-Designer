@@ -19,6 +19,11 @@ export function resetInputs(component: Component, inputName: string, newValue: I
 export interface IComponentModel {
   [index: string]: any;
 }
+
+export interface IComponetTemplVariable {
+  implicit: boolean;
+  name: string;
+}
 export abstract class Component {
   public selector: string;
   public abstract inputs: IInput[];
@@ -28,14 +33,14 @@ export abstract class Component {
   public templateInstance: string;
   public module: string;
   public inputsForDataBind: Map<string, any>;
-  public templateVariables: string[];
+  public templateVariables: IComponetTemplVariable[];
 
   constructor(
     selector: string,
     name: string,
     templateInstance: string,
-    module?: string,
-    templateVars?: [string]
+    module: string,
+    templateVars?: IComponetTemplVariable[]
   ) {
     this.selector = selector;
     this.templateInstance = `#${templateInstance}`;

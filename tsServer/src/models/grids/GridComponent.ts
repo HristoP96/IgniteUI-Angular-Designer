@@ -79,7 +79,12 @@ export class GridComponent extends GridModel {
     }
 
     public set perPage(val: number) {
-      this._perPage = val;
+      if (this.paging) {
+        this._perPage = val;
+      } else {
+        this._perPage = null;
+        val = null;
+      }
       resetInputs(this, 'perPage', val);
     }
 

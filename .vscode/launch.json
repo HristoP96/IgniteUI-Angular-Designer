@@ -5,13 +5,13 @@
     "version": "0.2.0",
     "configurations": [
 
-        
+
 
         {
             "type": "node",
             "request": "launch",
             "name": "Check Template",
-            "program": "${workspaceFolder}\\tsServer\\src\\engine\\TemplateBuilder.ts",
+            "program": "${workspaceFolder}\\tsServer\\src\\index.ts",
             "outFiles": [
                 "${workspaceFolder}\\tsServer\\dist/**/*.js"
             ]

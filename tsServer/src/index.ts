@@ -14,7 +14,8 @@ app.get( '/', ( req: any, res: any ) => {
 // start the Express server
 app.listen( port, () => {
     const grid = new GridComponent();
-    grid.paging = true;
+    grid.paging = false;
+    grid.perPage = 12;
     grid.generateGridTemplate();
 
     // tslint:disable-next-line:no-console

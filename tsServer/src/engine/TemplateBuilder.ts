@@ -2,6 +2,7 @@ import { Component } from '../models/Component';
 import { GridComponent } from '../models/grids/GridComponent';
 import { ITemplateGenerator } from '../models/ITemplateGenerator';
 import { TsFileBuilder } from './TsFileBuilder';
+import { NgTemplateBuilder } from './NgTemplateBuilder';
 
 export class ComponentTemplateBuilder implements ITemplateGenerator {
   public inputsForBinding: Map<string, any>;
@@ -36,7 +37,12 @@ ${ this.closeOuterTemplate(component)}`;
     let builder = '';
     if (component.children.length !== 0) {
       component.children.forEach((child) => {
-        child.template = this.generateTemplate(child);
+        if ((child as any).ngTemplate) {
+          // tslint:disable-next-line:max-line-length
+          child.template = ((this as ITemplateGenerator) as NgTemplateBuilder).generateTemplate((child as any).ngTemplate);
+        } else {
+          child.template = this.generateTemplate(child);
+        }
         builder += child.template + '\t';
       });
       return '\t' + builder;
