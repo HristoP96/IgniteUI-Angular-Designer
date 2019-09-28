@@ -1,5 +1,5 @@
 import { Component, IInput, resetInputs } from './Component';
-
+import { NgTemplate } from './NgTemplate';
 export enum ColumnDataType {
   String = 'string',
   Bool = 'boolean',
@@ -22,16 +22,26 @@ export class ColumnComponent extends Component {
   private _resizable: boolean = false;
   private _searchable: boolean = false;
   private _sortable: boolean = false;
+  private _ngTemplate: NgTemplate = null;
 
   constructor(field: string, dataType: ColumnDataType) {
     super('igx-column',
       'IgxColumnComponent',
-      'column' + ColumnComponent.num++);
+      'column' + ColumnComponent.num++,
+      null, [{implicit: true, name: 'value'}, {implicit: false, name: 'cell'}]);
     this.setInputs();
     this.field = field;
     this.header = this.setHeader(field);
     this.dataType = dataType;
 
+  }
+
+  public set ngTemplate(template: NgTemplate) {
+    this._ngTemplate = template;
+  }
+
+  public get ngTemplate() {
+    return this._ngTemplate;
   }
 
   public set dataType(val: any) {
